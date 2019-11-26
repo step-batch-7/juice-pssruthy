@@ -1,12 +1,15 @@
 const fs = require("fs");
 
 const readTransactionRecords = function(path) {
-  const records = fs.readFileSync(path, "utf8");
-  return JSON.parse(records);
+  return fs.readFileSync(path, "utf8");
 };
 
 const writeTransactionRecords = function(paths, records) {
-  fs.writeFileSync(paths, JSON.stringify(records), "utf8");
+  fs.writeFileSync(paths, records, "utf8");
+};
+
+const getDate = function() {
+  return new Date().toJSON();
 };
 
 const isPositiveNumber = function(number) {
@@ -25,3 +28,4 @@ exports.writeTransactionRecords = writeTransactionRecords;
 exports.readTransactionRecords = readTransactionRecords;
 exports.isPositiveNumber = isPositiveNumber;
 exports.getSplitedParameters = getSplitedParameters;
+exports.getDate = getDate;

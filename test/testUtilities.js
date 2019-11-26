@@ -3,6 +3,7 @@ const isPositiveNumber = require("../src/utilitiesLib").isPositiveNumber;
 const getSplitedParameters = require("../src/utilitiesLib")
   .getSplitedParameters;
 
+/*------------------------------isPositiveNumber------------------------------*/
 describe("isPositiveNumber", function() {
   it("Should return true for integer numbers", function() {
     assert.ok(isPositiveNumber("3"));
@@ -16,6 +17,7 @@ describe("isPositiveNumber", function() {
   });
 });
 
+/*------------------------------getSplitedParameters------------------------------*/
 describe("getSplitedParameters", function() {
   it("Should return empty object when no parameters are passed", function() {
     let actualValue = getSplitedParameters({}, []);

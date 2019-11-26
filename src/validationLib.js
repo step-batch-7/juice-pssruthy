@@ -7,7 +7,7 @@ const areArgsValid = function(cmdLineArgs) {
   if (isFeatureOptionValid(feature)) {
     const featureFuncs = {};
     featureFuncs["--save"] = areSaveFeatureDetailsValid;
-    featureFuncs["--query"] = areQueryFeatureDetailsValid;
+    featureFuncs["--query"] = areQueryDetailsValid;
     isFeatureDetailsValid = featureFuncs[feature];
 
     return isFeatureDetailsValid(cmdLineArgs.slice(1));
@@ -27,9 +27,15 @@ const areSaveFeatureDetailsValid = function(details) {
   return beverageFlag && quantityFlag && empIdFlag;
 };
 
-const areQueryFeatureDetailsValid = function(details) {
-  return true;
+const areQueryDetailsValid = function(details) {
+  if (details.length != 2) {
+    return false;
+  }
+  const parameters = getSplitedParameters({}, details);
+  const empIdFlag = isPositiveNumber(parameters["--empId"]);
+  return empIdFlag;
 };
+
 const isFeatureOptionValid = function(option) {
   const validOptions = ["--save", "--query"];
   return validOptions.includes(option);
@@ -43,5 +49,6 @@ const isBeverageValid = function(beverage) {
 
 exports.areArgsValid = areArgsValid;
 exports.areSaveFeatureDetailsValid = areSaveFeatureDetailsValid;
+exports.areQueryDetailsValid = areQueryDetailsValid;
 exports.isFeatureOptionValid = isFeatureOptionValid;
 exports.isBeverageValid = isBeverageValid;
