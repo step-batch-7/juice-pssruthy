@@ -1,8 +1,10 @@
 const assert = require("assert");
-const saveRecord = require("../src/beverageLib").saveRecord;
-const queryRecords = require("../src/beverageLib").queryRecords;
-const getTransactionRecord = require("../src/beverageLib").getTransactionRecord;
-const operateJuiceRecords = require("../src/beverageLib").operateJuiceRecords;
+const {
+  saveRecord,
+  queryRecords,
+  getTransactionRecord,
+  operateJuiceRecords
+} = require("../src/beverageLib");
 
 /*------------------------------operateJuiceRecords------------------------------*/
 
@@ -18,14 +20,7 @@ describe("operateJuiceRecords", function() {
     );
   });
   it("Should return empty when option count is invalid", function() {
-    const args = [
-      "--save",
-      "--beverage",
-      "orange",
-      "--quantity",
-      "--empId",
-      "1234"
-    ];
+    const args = ["--save", "--beverage", "orange", "--qty", "--empId", "1234"];
     assert.strictEqual(operateJuiceRecords(args), "");
   });
 
@@ -34,7 +29,7 @@ describe("operateJuiceRecords", function() {
       "--save",
       "--beverage",
       "orange",
-      "--quantity",
+      "--qty",
       "1",
       "--empId",
       "1111"
@@ -62,12 +57,13 @@ describe("operateJuiceRecords", function() {
       path
     );
     const expectedValue =
-      "Employee ID,Beverage,Quantity,Date\n1111,orange,1,2019-11-20T05:50:28.267Z";
+      "Transaction Recorded:\nEmployee ID,Beverage,Quantity,Date\n1111,orange,1,2019-11-20T05:50:28.267Z";
     assert.strictEqual(actualValue, expectedValue);
   });
 });
 
 /*------------------------------saveRecord------------------------------*/
+
 describe("saveRecord", function() {
   it("Should record the beverage transactions record when the record is empty", function() {
     let getDate = function() {
@@ -78,13 +74,17 @@ describe("saveRecord", function() {
       assert.strictEqual(path, "./juiceTransactionRecords.json");
     };
 
-    let expectedValue =
-      "Employee ID,Beverage,Quantity,Date\n1111,Orange,1,2019-11-20T05:50:28.267Z";
+    let expectedValue = {
+      empId: "1111",
+      beverage: "Orange",
+      qty: 1,
+      date: "2019-11-20T05:50:28.267Z"
+    };
 
-    assert.strictEqual(
+    assert.deepStrictEqual(
       saveRecord(
         "",
-        { "--beverage": "Orange", "--quantity": "1", "--empId": "1111" },
+        { "--beverage": "Orange", "--qty": "1", "--empId": "1111" },
         writeRecord,
         "./juiceTransactionRecords.json",
         getDate
@@ -103,35 +103,43 @@ describe("saveRecord", function() {
     };
 
     let actualValue = saveRecord(
-      '{"1111": [{ "beverage": "Watermelon", "quantity": "2", "date": "2019-11-20T05:50:28.267Z" }] }',
-      { "--empId": "1111", "--beverage": "Orange", "--quantity": "1" },
+      '{"1111": [{ "beverage": "Watermelon", "qty": "2", "date": "2019-11-20T05:50:28.267Z" }] }',
+      { "--empId": "1111", "--beverage": "Orange", "--qty": "1" },
       writeRecord,
       "./juiceTransactionRecords.json",
       getDate
     );
 
-    let expectedValue =
-      "Employee ID,Beverage,Quantity,Date" +
-      "\n1111,Orange,1,2019-11-20T05:50:28.267Z";
+    let expectedValue = {
+      empId: "1111",
+      beverage: "Orange",
+      qty: 1,
+      date: "2019-11-20T05:50:28.267Z"
+    };
 
-    assert.strictEqual(actualValue, expectedValue);
+    assert.deepStrictEqual(actualValue, expectedValue);
   });
 });
 
 /*------------------------------queryRecord------------------------------*/
+
 describe("queryRecords", function() {
   it("Should give all beverage transactions of a employee", function() {
     let date = "2019-11-20T05:50:28.267Z";
     let actualValue = queryRecords(
-      '{ "1111": [{ "beverage": "Orange", "quantity": "1", "date": "2019-11-20T05:50:28.267Z" }] }',
+      '{ "1111": [{ "empId":"1111","beverage": "Orange", "qty": "1", "date": "2019-11-20T05:50:28.267Z" }] }',
       { "--empId": "1111" }
     );
 
-    let expectedValue =
-      "Transaction completed\nEmployee ID,Beverage,Quantity,Date\n1111,Orange,1," +
-      date +
-      "\nTotal:1 juices";
-    assert.strictEqual(actualValue, expectedValue);
+    let expectedValue = [
+      {
+        empId: "1111",
+        beverage: "Orange",
+        qty: "1",
+        date: "2019-11-20T05:50:28.267Z"
+      }
+    ];
+    assert.deepStrictEqual(actualValue, expectedValue);
   });
 
   it("Should give 'Employee ID does not exist' when record of an employee is not present", function() {
@@ -142,7 +150,7 @@ describe("queryRecords", function() {
 
     let date = new Date();
     actualValue = queryRecords(
-      '{ "1111": [{ "beverage": "orange", "quantity": "1", "date": "2019-11-20T05:50:28.267Z" }] }',
+      '{ "1111": [{ "empId":"1111","beverage": "orange", "qty": "1", "date": "2019-11-20T05:50:28.267Z" }] }',
       { "--empId": "1234" }
     );
     assert.strictEqual(actualValue, expectedValue);
@@ -150,6 +158,7 @@ describe("queryRecords", function() {
 });
 
 /*------------------------------getTransactionRecord------------------------------*/
+
 describe("getTransactionRecord", function() {
   it("Should return an record object", function() {
     const getDate = function() {
@@ -158,14 +167,15 @@ describe("getTransactionRecord", function() {
 
     let parameters = {
       "--beverage": "orange",
-      "--quantity": "1",
+      "--qty": "1",
       "--empId": "1235"
     };
 
     let actualValue = getTransactionRecord(parameters, getDate);
     let expectedValue = {
+      empId: "1235",
       beverage: "orange",
-      quantity: 1,
+      qty: 1,
       date: "2019-11-20T05:50:28.267Z"
     };
 

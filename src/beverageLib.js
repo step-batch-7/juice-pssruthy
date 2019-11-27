@@ -2,6 +2,7 @@ const writeTransactionRecords = require("./utilitiesLib")
   .writeTransactionRecords;
 const areArgsValid = require("./validationLib").areArgsValid;
 const getSplitedParameters = require("./utilitiesLib").getSplitedParameters;
+const { formatSaveRecord, formateQueryRecord } = require("./formatRecord");
 
 const operateJuiceRecords = function(
   cmdLineArgs,
@@ -16,10 +17,22 @@ const operateJuiceRecords = function(
 
   const transactionRecords = readFunc(path, "utf8");
   const featureFuncRefs = { "--save": saveRecord, "--query": queryRecords };
-  const featureFunc = featureFuncRefs[cmdLineArgs[0]];
+  const feature = cmdLineArgs[0];
+  const featureFunc = featureFuncRefs[feature];
   const parameters = getSplitedParameters({}, cmdLineArgs.slice(1));
 
-  return featureFunc(transactionRecords, parameters, writeFunc, path, getDate);
+  const recordDetails = featureFunc(
+    transactionRecords,
+    parameters,
+    writeFunc,
+    path,
+    getDate
+  );
+  const formatFuncRefs = {
+    "--save": formatSaveRecord,
+    "--query": formateQueryRecord
+  };
+  return formatFuncRefs[feature](recordDetails);
 };
 
 const saveRecord = function(
@@ -44,18 +57,7 @@ const saveRecord = function(
   const newRecord = getTransactionRecord(parameters, getDate);
   transactionRecords[empId].push(newRecord);
   writeFunc(path, JSON.stringify(transactionRecords));
-
-  let recordedTransaction = "Employee ID,Beverage,Quantity,Date\n";
-  recordedTransaction =
-    recordedTransaction +
-    empId +
-    "," +
-    newRecord["beverage"] +
-    "," +
-    newRecord["quantity"] +
-    "," +
-    newRecord["date"];
-  return recordedTransaction;
+  return newRecord;
 };
 
 const queryRecords = function(transactionRcds, parameters) {
@@ -65,33 +67,32 @@ const queryRecords = function(transactionRcds, parameters) {
   if (!transactionRecords.hasOwnProperty(empId)) {
     return "Employee ID does not exist";
   }
-  let empRecords = "Transaction completed\nEmployee ID,Beverage,Quantity,Date";
-  let totalBeverage = 0;
-  for (let transaction of transactionRecords[empId]) {
-    empRecords =
-      empRecords +
-      "\n" +
-      empId +
-      "," +
-      transaction["beverage"] +
-      "," +
-      transaction["quantity"] +
-      "," +
-      transaction["date"];
-    totalBeverage += +transaction["quantity"];
-  }
-  empRecords = empRecords + "\n" + "Total:" + totalBeverage + " juices";
-  return empRecords;
+  return transactionRecords[empId];
 };
 
 const getTransactionRecord = function(parameters, getDate) {
   const newRecord = {
+    empId: parameters["--empId"],
     beverage: parameters["--beverage"],
-    quantity: +parameters["--quantity"],
+    qty: +parameters["--qty"],
     date: getDate()
   };
   return newRecord;
 };
+
+// const filterRecord = function(parameters) {
+//   return function(record) {
+//     let flag = true;
+//     for (const option in parameters) {
+//       if (option === "--date") {
+//         flag = flag && parameters[option] == record[option].slice(0, 10);
+//       } else {
+//         flag = flag && parameters[option] == record[option];
+//       }
+//     }
+//     return flag;
+//   };
+// };
 
 exports.saveRecord = saveRecord;
 exports.queryRecords = queryRecords;

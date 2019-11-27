@@ -1,5 +1,8 @@
-const isPositiveNumber = require("./utilitiesLib").isPositiveNumber;
-const getSplitedParameters = require("./utilitiesLib").getSplitedParameters;
+const {
+  isPositiveNumber,
+  getSplitedParameters,
+  isValidLength
+} = require("./utilitiesLib");
 
 const areArgsValid = function(cmdLineArgs) {
   const feature = cmdLineArgs[0];
@@ -16,24 +19,21 @@ const areArgsValid = function(cmdLineArgs) {
 };
 
 const areSaveFeatureDetailsValid = function(details) {
-  if (details.length != 6) {
-    return false;
-  }
+  const lengthFlag = isValidLength(details.length, 6);
   const parameters = getSplitedParameters({}, details);
   const beverageFlag = isBeverageValid(parameters["--beverage"]);
-  const quantityFlag = isPositiveNumber(parameters["--quantity"]);
+  const qtyFlag = isPositiveNumber(parameters["--qty"]);
   const empIdFlag = isPositiveNumber(parameters["--empId"]);
 
-  return beverageFlag && quantityFlag && empIdFlag;
+  return lengthFlag && beverageFlag && qtyFlag && empIdFlag;
 };
 
 const areQueryDetailsValid = function(details) {
-  if (details.length != 2) {
-    return false;
-  }
+  const lengthFlag = isValidLength(details.length, 4);
   const parameters = getSplitedParameters({}, details);
-  const empIdFlag = isPositiveNumber(parameters["--empId"]);
-  return empIdFlag;
+  const optionsFlag = areQueryOptionsValid(Object.keys(parameters));
+  const empIdFlag = isValidEmpIdForQuery(parameters);
+  return lengthFlag && optionsFlag && empIdFlag;
 };
 
 const isFeatureOptionValid = function(option) {
@@ -47,8 +47,27 @@ const isBeverageValid = function(beverage) {
   return beverages.includes(beverage);
 };
 
+const isValidEmpIdForQuery = function(parameters) {
+  const empIdPresentFlag =
+    parameters.hasOwnProperty("--empId") &&
+    isPositiveNumber(parameters["--empId"]);
+  const empIdAbsentFlag = !parameters.hasOwnProperty("--empId");
+  return empIdAbsentFlag || empIdPresentFlag;
+};
+
+const areQueryOptionsValid = function(options) {
+  let optionFlag = true;
+  const queryOptions = ["--empId", "--date"];
+  for (const option of options) {
+    optionFlag = optionFlag && queryOptions.includes(option);
+  }
+  return optionFlag;
+};
+
 exports.areArgsValid = areArgsValid;
 exports.areSaveFeatureDetailsValid = areSaveFeatureDetailsValid;
 exports.areQueryDetailsValid = areQueryDetailsValid;
 exports.isFeatureOptionValid = isFeatureOptionValid;
 exports.isBeverageValid = isBeverageValid;
+exports.isValidEmpIdForQuery = isValidEmpIdForQuery;
+exports.areQueryOptionsValid = areQueryOptionsValid;

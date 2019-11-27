@@ -24,8 +24,20 @@ const getSplitedParameters = function(splittedParameters, parameters) {
   return getSplitedParameters(splittedParameters, parameters.slice(2));
 };
 
+const isValidDate = function isValidDate(date) {
+  let dateArray = date.split("-");
+  let d = new Date(dateArray[0], dateArray[1] - 1, dateArray[2]);
+  return d && d.getMonth() + 1 == dateArray[1] && +dateArray[0] > 0;
+};
+
+const isValidLength = function(length, limit) {
+  return length <= limit && length % 2 == 0;
+};
+
 exports.writeTransactionRecords = writeTransactionRecords;
 exports.readTransactionRecords = readTransactionRecords;
 exports.isPositiveNumber = isPositiveNumber;
 exports.getSplitedParameters = getSplitedParameters;
 exports.getDate = getDate;
+exports.isValidLength = isValidLength;
+exports.isValidDate = isValidDate;

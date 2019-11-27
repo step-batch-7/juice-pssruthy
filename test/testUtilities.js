@@ -1,7 +1,10 @@
 const assert = require("assert");
-const isPositiveNumber = require("../src/utilitiesLib").isPositiveNumber;
-const getSplitedParameters = require("../src/utilitiesLib")
-  .getSplitedParameters;
+const {
+  isPositiveNumber,
+  isValidLength,
+  getSplitedParameters,
+  isValidDate
+} = require("../src/utilitiesLib.js");
 
 /*------------------------------isPositiveNumber------------------------------*/
 describe("isPositiveNumber", function() {
@@ -17,6 +20,30 @@ describe("isPositiveNumber", function() {
   });
 });
 
+/*------------------------------isValidLength------------------------------*/
+
+describe("isValidLength", function() {
+  it("Should return true for valid length", function() {
+    assert.ok(isValidLength(4, 4));
+  });
+});
+
+/*------------------------------isValidDate------------------------------*/
+
+describe("isValidDate", function() {
+  it("Should return true for valid date", function() {
+    assert.ok(isValidDate("2019-10-10"));
+    assert.ok(isValidDate("2018-12-31"));
+    assert.ok(isValidDate("2000-02-29"));
+  });
+  it("Should return false for invalid date", function() {
+    assert.ok(!isValidDate("2019-14-12"));
+    assert.ok(!isValidDate("0-12-12"));
+    assert.ok(!isValidDate("2000-2-30"));
+    assert.ok(!isValidDate("2100-02-29"));
+  });
+});
+
 /*------------------------------getSplitedParameters------------------------------*/
 describe("getSplitedParameters", function() {
   it("Should return empty object when no parameters are passed", function() {
@@ -29,16 +56,16 @@ describe("getSplitedParameters", function() {
     assert.deepStrictEqual(actualValue, expectedValue);
   });
   it("Should return splited object for more than one pair", function() {
-    let args = ["--beverage", "orange", "--quantity", "1"];
+    let args = ["--beverage", "orange", "--qty", "1"];
     let actualValue = getSplitedParameters({}, args);
-    let expectedValue = { "--beverage": "orange", "--quantity": "1" };
+    let expectedValue = { "--beverage": "orange", "--qty": "1" };
     assert.deepStrictEqual(actualValue, expectedValue);
 
-    args = ["--beverage", "orange", "--quantity", "1", "--empId", "1123"];
+    args = ["--beverage", "orange", "--qty", "1", "--empId", "1123"];
     actualValue = getSplitedParameters({}, args);
     expectedValue = {
       "--beverage": "orange",
-      "--quantity": "1",
+      "--qty": "1",
       "--empId": "1123"
     };
     assert.deepStrictEqual(actualValue, expectedValue);

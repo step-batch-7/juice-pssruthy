@@ -1,1 +1,38 @@
-{"1111":[{"beverage":"Watermelon","quantity":"2","date":"2019-11-25T14:23:56.069Z"},{"beverage":"Orange","quantity":1,"date":"2019-11-25T14:23:56.069Z"}],"1245":[{"beverage":"watermelon","quantity":2,"date":"2019-11-26T06:45:46.871Z"},{"beverage":"watermelon","quantity":2,"date":"2019-11-26T06:46:00.403Z"}],"1278":[{"beverage":"watermelon","quantity":2,"date":"2019-11-26T06:46:53.030Z"},{"beverage":"watermelon","quantity":2,"date":"2019-11-26T06:51:55.293Z"},{"beverage":"watermelon","quantity":2,"date":"2019-11-26T06:54:48.074Z"},{"beverage":"watermelon","quantity":2,"date":"2019-11-26T08:18:04.842Z"},{"beverage":"watermelon","quantity":2,"date":"2019-11-26T08:24:46.841Z"},{"beverage":"watermelon","quantity":2,"date":"2019-11-26T09:25:34.341Z"},{"beverage":"watermelon","quantity":2,"date":"2019-11-26T09:27:49.613Z"},{"beverage":"watermelon","quantity":2,"date":"2019-11-26T09:29:43.787Z"}]}
+{
+  "128": [
+    {
+      "empId": "128",
+      "beverage": "watermelon",
+      "qty": 1,
+      "date": "2019-11-27T10:57:06.105Z"
+    },
+    {
+      "empId": "128",
+      "beverage": "watermelon",
+      "qty": 1,
+      "date": "2019-11-27T13:43:04.860Z"
+    }
+  ],
+  "1278": [
+    {
+      "empId": "1278",
+      "beverage": "orange",
+      "qty": 2,
+      "date": "2019-11-27T09:27:20.112Z"
+    },
+    {
+      "empId": "1278",
+      "beverage": "orange",
+      "qty": 2,
+      "date": "2019-11-27T10:56:38.888Z"
+    }
+  ],
+  "12345": [
+    {
+      "empId": "12345",
+      "beverage": "watermelon",
+      "qty": 1,
+      "date": "2019-11-27T13:43:28.850Z"
+    }
+  ]
+}
