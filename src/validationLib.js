@@ -42,7 +42,7 @@ const isFeatureOptionValid = function(option) {
 };
 
 const isBeverageValid = function(beverage) {
-  const beverages = ["orange", "watermelon"];
+  const beverages = ["Orange", "Watermelon"];
 
   return beverages.includes(beverage);
 };

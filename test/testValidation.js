@@ -18,7 +18,7 @@ describe("areArgsValid", function() {
       "--qty",
       "1",
       "--beverage",
-      "orange",
+      "Orange",
       "--empId",
       "1121"
     ];
@@ -26,7 +26,7 @@ describe("areArgsValid", function() {
     args = [
       "--save",
       "--beverage",
-      "watermelon",
+      "Watermelon",
       "--qty",
       "2",
       "--empId",
@@ -35,16 +35,16 @@ describe("areArgsValid", function() {
     assert.ok(areArgsValid(args));
   });
   it("Should return false for save feature", function() {
-    let args = ["--save", "--beverage", "orange"];
+    let args = ["--save", "--beverage", "Orange"];
     assert.ok(!areArgsValid(args));
 
-    args = ["--save", "--beverage", "watermelon", "--qty", "1e"];
+    args = ["--save", "--beverage", "Watermelon", "--qty", "1e"];
     assert.ok(!areArgsValid(args));
 
     args = [
       "--save",
       "--beverage",
-      "watermelon",
+      "Watermelon",
       "--qty",
       "1",
       "--empId",
@@ -63,7 +63,7 @@ describe("areArgsValid", function() {
     assert.ok(["--query", "--empId", "123e", "123"]);
   });
   it("Should return false for invalid feature", function() {
-    assert.ok(!areArgsValid(["--record", "--beverage", "orange"]));
+    assert.ok(!areArgsValid(["--record", "--beverage", "Orange"]));
   });
 });
 
@@ -97,10 +97,10 @@ describe("areQueryFeatureDetailsValid", function() {
 
 describe("areSaveFeatureDetailsValid", function() {
   it("Should return true when details are valid", function() {
-    let args = ["--beverage", "orange", "--qty", "1", "--empId", "11111"];
+    let args = ["--beverage", "Orange", "--qty", "1", "--empId", "11111"];
     assert.ok(areSaveFeatureDetailsValid(args));
 
-    args = ["--beverage", "watermelon", "--qty", "1", "--empId", "11345"];
+    args = ["--beverage", "Watermelon", "--qty", "1", "--empId", "11345"];
     assert.ok(areSaveFeatureDetailsValid(args));
   });
 
@@ -108,10 +108,10 @@ describe("areSaveFeatureDetailsValid", function() {
     let args = ["--beverage", "tomato", "--qty", "2"];
     assert.ok(!areSaveFeatureDetailsValid(args));
 
-    args = ["--juice", "orange", "--qty", "e", "empId", "1234"];
+    args = ["--juice", "Orange", "--qty", "e", "empId", "1234"];
     assert.ok(!areSaveFeatureDetailsValid(args));
 
-    args = ["--beverage", "orange", "--qty", "3", "empId", "1d34"];
+    args = ["--beverage", "Orange", "--qty", "3", "empId", "1d34"];
     assert.ok(!areSaveFeatureDetailsValid(args));
   });
 });
@@ -119,8 +119,8 @@ describe("areSaveFeatureDetailsValid", function() {
 /*------------------------------isBeverageValid------------------------------*/
 describe("isBeverageValid", function() {
   it("Should return true when beverage is available", function() {
-    assert.ok(isBeverageValid("orange"));
-    assert.ok(isBeverageValid("watermelon"));
+    assert.ok(isBeverageValid("Orange"));
+    assert.ok(isBeverageValid("Watermelon"));
   });
   it("Should return false when beverage is not available", function() {
     assert.ok(!isBeverageValid("leaf"));

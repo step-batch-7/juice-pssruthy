@@ -3,7 +3,8 @@ const {
   saveRecord,
   queryRecords,
   getTransactionRecord,
-  operateJuiceRecords
+  operateJuiceRecords,
+  filterQueryRecord
 } = require("../src/beverageLib");
 
 /*------------------------------operateJuiceRecords------------------------------*/
@@ -15,12 +16,12 @@ describe("operateJuiceRecords", function() {
 
   it("Should return empty when options are invalid", function() {
     assert.strictEqual(
-      operateJuiceRecords(["--save", "--juice", "orange"]),
+      operateJuiceRecords(["--save", "--juice", "Orange"]),
       ""
     );
   });
   it("Should return empty when option count is invalid", function() {
-    const args = ["--save", "--beverage", "orange", "--qty", "--empId", "1234"];
+    const args = ["--save", "--beverage", "Orange", "--qty", "--empId", "1234"];
     assert.strictEqual(operateJuiceRecords(args), "");
   });
 
@@ -28,7 +29,7 @@ describe("operateJuiceRecords", function() {
     const args = [
       "--save",
       "--beverage",
-      "orange",
+      "Orange",
       "--qty",
       "1",
       "--empId",
@@ -57,7 +58,7 @@ describe("operateJuiceRecords", function() {
       path
     );
     const expectedValue =
-      "Transaction Recorded:\nEmployee ID,Beverage,Quantity,Date\n1111,orange,1,2019-11-20T05:50:28.267Z";
+      "Transaction Recorded:\nEmployee ID,Beverage,Quantity,Date\n1111,Orange,1,2019-11-20T05:50:28.267Z";
     assert.strictEqual(actualValue, expectedValue);
   });
 });
@@ -103,7 +104,7 @@ describe("saveRecord", function() {
     };
 
     let actualValue = saveRecord(
-      '{"1111": [{ "beverage": "Watermelon", "qty": "2", "date": "2019-11-20T05:50:28.267Z" }] }',
+      '[{ "beverage": "Watermelon", "qty": "2", "date": "2019-11-20T05:50:28.267Z" }]',
       { "--empId": "1111", "--beverage": "Orange", "--qty": "1" },
       writeRecord,
       "./juiceTransactionRecords.json",
@@ -127,7 +128,7 @@ describe("queryRecords", function() {
   it("Should give all beverage transactions of a employee", function() {
     let date = "2019-11-20T05:50:28.267Z";
     let actualValue = queryRecords(
-      '{ "1111": [{ "empId":"1111","beverage": "Orange", "qty": "1", "date": "2019-11-20T05:50:28.267Z" }] }',
+      '[{ "empId":"1111","beverage": "Orange", "qty": "1", "date": "2019-11-20T05:50:28.267Z" }]',
       { "--empId": "1111" }
     );
 
@@ -142,7 +143,7 @@ describe("queryRecords", function() {
     assert.deepStrictEqual(actualValue, expectedValue);
   });
 
-  it("Should give 'Employee ID does not exist' when record of an employee is not present", function() {
+  it.skip("Should give 'Employee ID does not exist' when record of an employee is not present", function() {
     let actualValue = queryRecords("{}", { "-empId": "1111" });
     let expectedValue = "Employee ID does not exist";
 
@@ -150,7 +151,7 @@ describe("queryRecords", function() {
 
     let date = new Date();
     actualValue = queryRecords(
-      '{ "1111": [{ "empId":"1111","beverage": "orange", "qty": "1", "date": "2019-11-20T05:50:28.267Z" }] }',
+      '{ "1111": [{ "empId":"1111","beverage": "Orange", "qty": "1", "date": "2019-11-20T05:50:28.267Z" }] }',
       { "--empId": "1234" }
     );
     assert.strictEqual(actualValue, expectedValue);
@@ -166,7 +167,7 @@ describe("getTransactionRecord", function() {
     };
 
     let parameters = {
-      "--beverage": "orange",
+      "--beverage": "Orange",
       "--qty": "1",
       "--empId": "1235"
     };
@@ -174,11 +175,78 @@ describe("getTransactionRecord", function() {
     let actualValue = getTransactionRecord(parameters, getDate);
     let expectedValue = {
       empId: "1235",
-      beverage: "orange",
+      beverage: "Orange",
       qty: 1,
       date: "2019-11-20T05:50:28.267Z"
     };
 
     assert.deepStrictEqual(actualValue, expectedValue);
+  });
+});
+
+/*------------------------------filterQueryRecord------------------------------*/
+
+describe("filterQueryRecord", function() {
+  it("Should return true when the empId is same", function() {
+    let record = {
+      empId: "1234",
+      date: "2019-11-20T05:50:28.267Z",
+      qty: "1",
+      beverage: "Orange"
+    };
+    assert.ok(filterQueryRecord({ "--empId": "1234" }, record));
+  });
+  it("Should return false when the empId is different", function() {
+    let record = {
+      empId: "123",
+      date: "2019-11-20T05:50:28.267Z",
+      qty: "1",
+      beverage: "Orange"
+    };
+    assert.ok(!filterQueryRecord({ "--empId": "1234" }, record));
+  });
+  it("Should return true when the date is same", function() {
+    let record = {
+      empId: "1234",
+      date: "2019-11-20T05:50:28.267Z",
+      qty: "1",
+      beverage: "Orange"
+    };
+    assert.ok(filterQueryRecord({ "--date": "2019-11-20" }, record));
+  });
+  it("Should return false when the date is different", function() {
+    let record = {
+      empId: "1234",
+      date: "2019-11-20T05:50:28.267Z",
+      qty: "1",
+      beverage: "Orange"
+    };
+    assert.ok(!filterQueryRecord({ "--date": "2019-11-21" }, record));
+  });
+  it("Should return true when the date and empId are same", function() {
+    const parameters = {
+      "--date": "2019-11-20",
+      "--empId": "1234"
+    };
+    let record = {
+      empId: "1234",
+      date: "2019-11-20T05:50:28.267Z",
+      qty: "1",
+      beverage: "Orange"
+    };
+    assert.ok(filterQueryRecord(parameters, record));
+  });
+  it("Should return false when the date and empId are different", function() {
+    const parameters = {
+      "--date": "2019-11-20",
+      "--empId": "1234"
+    };
+    let record = {
+      empId: "1234",
+      date: "2019-10-20T05:50:28.267Z",
+      qty: "1",
+      beverage: "Orange"
+    };
+    assert.ok(!filterQueryRecord(parameters, record));
   });
 });

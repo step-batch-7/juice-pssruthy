@@ -42,7 +42,7 @@ const saveRecord = function(
   path,
   getDate
 ) {
-  let transactionRecords = {};
+  let transactionRecords = [];
 
   if (prevTransactionRcds != "") {
     transactionRecords = JSON.parse(prevTransactionRcds);
@@ -50,24 +50,23 @@ const saveRecord = function(
 
   const empId = parameters["--empId"];
 
-  if (!transactionRecords.hasOwnProperty(empId)) {
-    transactionRecords[empId] = [];
-  }
-
   const newRecord = getTransactionRecord(parameters, getDate);
-  transactionRecords[empId].push(newRecord);
+  transactionRecords.push(newRecord);
   writeFunc(path, JSON.stringify(transactionRecords));
   return newRecord;
 };
 
 const queryRecords = function(transactionRcds, parameters) {
-  const empId = parameters["--empId"];
+  // const empId = parameters["--empId"];
   const transactionRecords = JSON.parse(transactionRcds);
 
-  if (!transactionRecords.hasOwnProperty(empId)) {
-    return "Employee ID does not exist";
-  }
-  return transactionRecords[empId];
+  // if (!transactionRecords.hasOwnProperty(empId)) {
+  //   return "Employee ID does not exist";
+  // }
+  const filteredRecords = transactionRecords.filter(
+    filterQueryRecord.bind(null, parameters)
+  );
+  return filteredRecords;
 };
 
 const getTransactionRecord = function(parameters, getDate) {
@@ -80,21 +79,25 @@ const getTransactionRecord = function(parameters, getDate) {
   return newRecord;
 };
 
-// const filterRecord = function(parameters) {
-//   return function(record) {
-//     let flag = true;
-//     for (const option in parameters) {
-//       if (option === "--date") {
-//         flag = flag && parameters[option] == record[option].slice(0, 10);
-//       } else {
-//         flag = flag && parameters[option] == record[option];
-//       }
-//     }
-//     return flag;
-//   };
-// };
+const filterQueryRecord = function(parameters, record) {
+  const options = {
+    "--empId": "empId",
+    "--date": "date"
+  };
+  let flag = true;
+  let optionValue = "";
+  for (const option in parameters) {
+    optionValue = record[options[option]];
+    if (option === "--date") {
+      optionValue = optionValue.slice(0, 10);
+    }
+    flag = flag && parameters[option] === optionValue;
+  }
+  return flag;
+};
 
 exports.saveRecord = saveRecord;
 exports.queryRecords = queryRecords;
 exports.getTransactionRecord = getTransactionRecord;
 exports.operateJuiceRecords = operateJuiceRecords;
+exports.filterQueryRecord = filterQueryRecord;

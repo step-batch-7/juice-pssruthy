@@ -51,20 +51,20 @@ describe("getSplitedParameters", function() {
     assert.deepStrictEqual(actualValue, {});
   });
   it("Should return splited object for one pair", function() {
-    let actualValue = getSplitedParameters({}, ["--beverage", "orange"]);
-    let expectedValue = { "--beverage": "orange" };
+    let actualValue = getSplitedParameters({}, ["--beverage", "Orange"]);
+    let expectedValue = { "--beverage": "Orange" };
     assert.deepStrictEqual(actualValue, expectedValue);
   });
   it("Should return splited object for more than one pair", function() {
-    let args = ["--beverage", "orange", "--qty", "1"];
+    let args = ["--beverage", "Orange", "--qty", "1"];
     let actualValue = getSplitedParameters({}, args);
-    let expectedValue = { "--beverage": "orange", "--qty": "1" };
+    let expectedValue = { "--beverage": "Orange", "--qty": "1" };
     assert.deepStrictEqual(actualValue, expectedValue);
 
-    args = ["--beverage", "orange", "--qty", "1", "--empId", "1123"];
+    args = ["--beverage", "Orange", "--qty", "1", "--empId", "1123"];
     actualValue = getSplitedParameters({}, args);
     expectedValue = {
-      "--beverage": "orange",
+      "--beverage": "Orange",
       "--qty": "1",
       "--empId": "1123"
     };
