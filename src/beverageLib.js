@@ -1,8 +1,8 @@
-const writeTransactionRecords = require("./utilitiesLib")
-  .writeTransactionRecords;
-const areArgsValid = require("./validationLib").areArgsValid;
-const getSplitedParameters = require("./utilitiesLib").getSplitedParameters;
-const { formatSaveRecord, formateQueryRecord } = require("./formatRecord");
+const areArgsValid = require('./validationLib').areArgsValid;
+const getSplitedParameters = require('./utilitiesLib').getSplitedParameters;
+const { formatSaveRecord, formateQueryRecord } = require('./formatRecord');
+
+//////////////////////////////////////////////////
 
 const operateJuiceRecords = function(
   cmdLineArgs,
@@ -12,14 +12,16 @@ const operateJuiceRecords = function(
   path
 ) {
   if (!areArgsValid(cmdLineArgs)) {
-    return "";
+    return '';
   }
 
-  const transactionRecords = readFunc(path, "utf8");
-  const featureFuncRefs = { "--save": saveRecord, "--query": queryRecords };
+  const transactionRecords = readFunc(path, 'utf8');
+  const featureFuncRefs = { '--save': saveRecord, '--query': queryRecords };
   const feature = cmdLineArgs[0];
   const featureFunc = featureFuncRefs[feature];
   const parameters = getSplitedParameters({}, cmdLineArgs.slice(1));
+
+  //////////////////////////////////////////////////
 
   const recordDetails = featureFunc(
     transactionRecords,
@@ -29,11 +31,13 @@ const operateJuiceRecords = function(
     getDate
   );
   const formatFuncRefs = {
-    "--save": formatSaveRecord,
-    "--query": formateQueryRecord
+    '--save': formatSaveRecord,
+    '--query': formateQueryRecord
   };
   return formatFuncRefs[feature](recordDetails);
 };
+
+//////////////////////////////////////////////////
 
 const saveRecord = function(
   prevTransactionRcds,
@@ -44,11 +48,11 @@ const saveRecord = function(
 ) {
   let transactionRecords = [];
 
-  if (prevTransactionRcds != "") {
+  if (prevTransactionRcds != '') {
     transactionRecords = JSON.parse(prevTransactionRcds);
   }
 
-  const empId = parameters["--empId"];
+  //const empId = parameters['--empId'];
 
   const newRecord = getTransactionRecord(parameters, getDate);
   transactionRecords.push(newRecord);
@@ -56,8 +60,9 @@ const saveRecord = function(
   return newRecord;
 };
 
+//////////////////////////////////////////////////
+
 const queryRecords = function(transactionRcds, parameters) {
-  // const empId = parameters["--empId"];
   const transactionRecords = JSON.parse(transactionRcds);
 
   // if (!transactionRecords.hasOwnProperty(empId)) {
@@ -69,26 +74,31 @@ const queryRecords = function(transactionRcds, parameters) {
   return filteredRecords;
 };
 
+//////////////////////////////////////////////////
+
 const getTransactionRecord = function(parameters, getDate) {
   const newRecord = {
-    empId: parameters["--empId"],
-    beverage: parameters["--beverage"],
-    qty: +parameters["--qty"],
+    empId: parameters['--empId'],
+    beverage: parameters['--beverage'],
+    qty: +parameters['--qty'],
     date: getDate()
   };
   return newRecord;
 };
 
+//////////////////////////////////////////////////
+
 const filterQueryRecord = function(parameters, record) {
   const options = {
-    "--empId": "empId",
-    "--date": "date"
+    '--empId': 'empId',
+    '--date': 'date',
+    '--beverage': 'beverage'
   };
   let flag = true;
-  let optionValue = "";
+  let optionValue = '';
   for (const option in parameters) {
     optionValue = record[options[option]];
-    if (option === "--date") {
+    if (option === '--date') {
       optionValue = optionValue.slice(0, 10);
     }
     flag = flag && parameters[option] === optionValue;

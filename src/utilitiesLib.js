@@ -1,11 +1,11 @@
-const fs = require("fs");
+const fs = require('fs');
 
 const readTransactionRecords = function(path) {
-  return fs.readFileSync(path, "utf8");
+  return fs.readFileSync(path, 'utf8');
 };
 
 const writeTransactionRecords = function(paths, records) {
-  fs.writeFileSync(paths, records, "utf8");
+  fs.writeFileSync(paths, records, 'utf8');
 };
 
 const getDate = function() {
@@ -25,9 +25,9 @@ const getSplitedParameters = function(splittedParameters, parameters) {
 };
 
 const isValidDate = function isValidDate(date) {
-  let dateArray = date.split("-");
-  let d = new Date(dateArray[0], dateArray[1] - 1, dateArray[2]);
-  return d && d.getMonth() + 1 == dateArray[1] && +dateArray[0] > 0;
+  let dateArray = date.split('-');
+  let newDate = new Date(dateArray[0], dateArray[1] - 1, dateArray[2]);
+  return newDate.getMonth() + 1 == dateArray[1] && +dateArray[0] > 0;
 };
 
 const isValidLength = function(length, limit) {

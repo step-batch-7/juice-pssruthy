@@ -29,7 +29,7 @@ const areSaveFeatureDetailsValid = function(details) {
 };
 
 const areQueryDetailsValid = function(details) {
-  const lengthFlag = isValidLength(details.length, 4);
+  const lengthFlag = isValidLength(details.length, 6);
   const parameters = getSplitedParameters({}, details);
   const optionsFlag = areQueryOptionsValid(Object.keys(parameters));
   const empIdFlag = isValidEmpIdForQuery(parameters);
@@ -57,7 +57,7 @@ const isValidEmpIdForQuery = function(parameters) {
 
 const areQueryOptionsValid = function(options) {
   let optionFlag = true;
-  const queryOptions = ["--empId", "--date"];
+  const queryOptions = ["--empId", "--date", "--beverage"];
   for (const option of options) {
     optionFlag = optionFlag && queryOptions.includes(option);
   }
