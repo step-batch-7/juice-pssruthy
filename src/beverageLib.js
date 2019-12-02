@@ -52,8 +52,6 @@ const saveRecord = function(
     transactionRecords = JSON.parse(prevTransactionRcds);
   }
 
-  //const empId = parameters['--empId'];
-
   const newRecord = getTransactionRecord(parameters, getDate);
   transactionRecords.push(newRecord);
   writeFunc(path, JSON.stringify(transactionRecords));
@@ -106,8 +104,10 @@ const filterQueryRecord = function(parameters, record) {
   return flag;
 };
 
-exports.saveRecord = saveRecord;
-exports.queryRecords = queryRecords;
-exports.getTransactionRecord = getTransactionRecord;
-exports.operateJuiceRecords = operateJuiceRecords;
-exports.filterQueryRecord = filterQueryRecord;
+module.exports = {
+  saveRecord,
+  queryRecords,
+  getTransactionRecord,
+  operateJuiceRecords,
+  filterQueryRecord
+};

@@ -1,15 +1,18 @@
-const fs = require('fs');
+const { existsSync, readFileSync, writeFileSync } = require('fs');
 
 const readTransactionRecords = function(path) {
-  return fs.readFileSync(path, 'utf8');
+  if (existsSync(path)) {
+    return readFileSync(path, 'utf8');
+  }
+  return '[]';
 };
 
 const writeTransactionRecords = function(paths, records) {
-  fs.writeFileSync(paths, records, 'utf8');
+  writeFileSync(paths, records, 'utf8');
 };
 
-const getDate = function() {
-  return new Date().toJSON();
+const getDate = () => {
+  return process.env.NOW || new Date().toJSON();
 };
 
 const isPositiveNumber = function(number) {
@@ -34,10 +37,12 @@ const isValidLength = function(length, limit) {
   return length <= limit && length % 2 == 0;
 };
 
-exports.writeTransactionRecords = writeTransactionRecords;
-exports.readTransactionRecords = readTransactionRecords;
-exports.isPositiveNumber = isPositiveNumber;
-exports.getSplitedParameters = getSplitedParameters;
-exports.getDate = getDate;
-exports.isValidLength = isValidLength;
-exports.isValidDate = isValidDate;
+module.exports = {
+  writeTransactionRecords,
+  readTransactionRecords,
+  isPositiveNumber,
+  getSplitedParameters,
+  getDate,
+  isValidDate,
+  isValidLength
+};

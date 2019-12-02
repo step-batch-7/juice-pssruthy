@@ -4,13 +4,13 @@ const {
   formatOneRecord,
   formatSaveRecord,
   formateQueryRecord,
-  giveHeadings
+  giveHeading
 } = require('../src/formatRecord');
 
 /*------------------------------formatOneRecord------------------------------*/
 
-describe('formatOneRecord', function() {
-  it('Should return formatted one transaction', function() {
+describe('formatOneRecord', () => {
+  it('Should give formatted one transaction', () => {
     // const date = new Date();
     const actualValue = formatOneRecord({
       empId: '1234',
@@ -26,8 +26,8 @@ describe('formatOneRecord', function() {
 
 /*------------------------------formatSaveRecord------------------------------*/
 
-describe('formatSaveRecord', function() {
-  it('Should return formatted details of one save feature', function() {
+describe('formatSaveRecord', () => {
+  it('Should give formatted details of one save feature', () => {
     // const date = new Date(2019 - 11 - 20);
     const record = {
       date: '2019-11-20T05:50:28.267Z',
@@ -43,18 +43,18 @@ describe('formatSaveRecord', function() {
   });
 });
 
-/*------------------------------giveHeadings------------------------------*/
+/*------------------------------giveHeading------------------------------*/
 
-describe('giveHeadings', function() {
-  it('Should return headings', function() {
-    assert.strictEqual(giveHeadings(), 'Employee ID,Beverage,Quantity,Date');
+describe('giveHeading', () => {
+  it('Should give heading', () => {
+    assert.strictEqual(giveHeading(), 'Employee ID,Beverage,Quantity,Date');
   });
 });
 
 /*------------------------------formateQueryRecord------------------------------*/
 
-describe('formateQueryRecord', function() {
-  it('Should return formatted records', function() {
+describe('formateQueryRecord', () => {
+  it('Should give formatted records when the total count is less than one', () => {
     //const date = new Date(2019 - 11 - 20);
     const records = [
       {
@@ -66,7 +66,28 @@ describe('formateQueryRecord', function() {
     ];
     const actualValue = formateQueryRecord(records);
     const expectedValue =
-      'Employee ID,Beverage,Quantity,Date\n123,Orange,1,2019-11-20T05:50:28.267Z\nTotal:1 Juices';
+      'Employee ID,Beverage,Quantity,Date\n123,Orange,1,2019-11-20T05:50:28.267Z\nTotal: 1 Juice';
+    assert.strictEqual(actualValue, expectedValue);
+  });
+  it('Should give formatted records when the total count is less than one', () => {
+    //const date = new Date(2019 - 11 - 20);
+    const records = [
+      {
+        empId: '123',
+        beverage: 'Orange',
+        qty: '1',
+        date: '2019-11-20T05:50:28.267Z'
+      },
+      {
+        empId: '1234',
+        beverage: 'Orange',
+        qty: '1',
+        date: '2019-11-20T05:50:45.267Z'
+      }
+    ];
+    const actualValue = formateQueryRecord(records);
+    const expectedValue =
+      'Employee ID,Beverage,Quantity,Date\n123,Orange,1,2019-11-20T05:50:28.267Z\n1234,Orange,1,2019-11-20T05:50:45.267Z\nTotal: 2 Juices';
     assert.strictEqual(actualValue, expectedValue);
   });
 });

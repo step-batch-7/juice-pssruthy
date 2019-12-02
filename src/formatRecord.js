@@ -1,32 +1,36 @@
 const formatSaveRecord = function(record) {
   let formatedRecord = 'Transaction Recorded:';
-  formatedRecord = `${formatedRecord}\n${giveHeadings()}\n${formatOneRecord(
+  formatedRecord = `${formatedRecord}\n${giveHeading()}\n${formatOneRecord(
     record
   )}`;
   return formatedRecord;
 };
 
 const formateQueryRecord = function(records) {
-  let formatedRecords = giveHeadings();
+  let formatedRecords = giveHeading();
   let totalBeverages = 0;
   for (const record of records) {
     formatedRecords = `${formatedRecords}\n${formatOneRecord(record)}`;
     totalBeverages = totalBeverages + +record['qty'];
   }
-  formatedRecords = `${formatedRecords}\nTotal:${totalBeverages} Juices`;
+  let juiceNoun = 'Juice';
+  totalBeverages > 1 ? (juiceNoun = 'Juices') : (juiceNoun = 'Juice');
+  formatedRecords = `${formatedRecords}\nTotal: ${totalBeverages} ${juiceNoun}`;
   return formatedRecords;
 };
 
 const formatOneRecord = function(record) {
-  const formatedRecord = `${record['empId']},${record['beverage']},${record['qty']},${record['date']}`;
+  const formatedRecord = `${record.empId},${record.beverage},${record.qty},${record.date}`;
   return formatedRecord;
 };
 
-const giveHeadings = function() {
-  return 'Employee ID,Beverage,Quantity,Date';
+const giveHeading = () => {
+  return ['Employee ID', 'Beverage', 'Quantity', 'Date'].join(',');
 };
 
-exports.formatOneRecord = formatOneRecord;
-exports.formatSaveRecord = formatSaveRecord;
-exports.giveHeadings = giveHeadings;
-exports.formateQueryRecord = formateQueryRecord;
+module.exports = {
+  formatOneRecord,
+  formatSaveRecord,
+  giveHeading,
+  formateQueryRecord
+};

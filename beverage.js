@@ -1,13 +1,13 @@
-console.log("Anna Juice Ltd");
-const operateJuiceRecords = require("./src/beverageLib").operateJuiceRecords;
-const readTransactionRecords = require("./src/utilitiesLib")
-  .readTransactionRecords;
-const writeTransactionRecords = require("./src/utilitiesLib")
-  .writeTransactionRecords;
-const getDate = require("./src/utilitiesLib").getDate;
+const operateJuiceRecords = require('./src/beverageLib').operateJuiceRecords;
+const {
+  readTransactionRecords,
+  writeTransactionRecords,
+  getDate
+} = require('./src/utilitiesLib');
+const { getDataStorePath } = require('./src/config');
 
 const main = function(cmdLinArgs) {
-  const path = "./juiceTransactionRecords.json";
+  const path = getDataStorePath(process.env);
   console.log(
     operateJuiceRecords(
       cmdLinArgs,

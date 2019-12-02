@@ -10,23 +10,23 @@ const {
 
 /*------------------------------operateJuiceRecords------------------------------*/
 
-describe('operateJuiceRecords', function() {
-  it('Should give empty when feature is invalid', function() {
+describe('operateJuiceRecords', () => {
+  it('Should give empty when feature is invalid', () => {
     assert.strictEqual(operateJuiceRecords(['']), '');
   });
 
-  it('Should give empty when options are invalid', function() {
+  it('Should give empty when options are invalid', () => {
     assert.strictEqual(
       operateJuiceRecords(['--save', '--juice', 'Orange']),
       ''
     );
   });
-  it('Should give empty when option count is invalid', function() {
+  it('Should give empty when option count is invalid', () => {
     const args = ['--save', '--beverage', 'Orange', '--qty', '--empId', '1234'];
     assert.strictEqual(operateJuiceRecords(args), '');
   });
 
-  it('Should give transaction details of save feature', function() {
+  it('Should give transaction details of save feature', () => {
     const args = [
       '--save',
       '--beverage',
@@ -44,7 +44,7 @@ describe('operateJuiceRecords', function() {
 
     const date = new Date().toJSON();
 
-    const getDate = function() {
+    const getDate = () => {
       return date;
     };
 
@@ -69,10 +69,10 @@ describe('operateJuiceRecords', function() {
 
 /*------------------------------saveRecord------------------------------*/
 
-describe('saveRecord', function() {
-  it('Should record the beverage transactions record when the record is empty', function() {
+describe('saveRecord', () => {
+  it('Should record the beverage transactions record when the record is empty', () => {
     const date = new Date();
-    let getDate = function() {
+    let getDate = () => {
       return date;
     };
 
@@ -99,10 +99,8 @@ describe('saveRecord', function() {
     );
   });
 
-  it('Should update the beverage transactions record of an present employee', function() {
-    let getDate = function() {
-      return '2019-11-20T05:50:28.267Z';
-    };
+  it('Should update the beverage transactions record of an present employee', () => {
+    let getDate = () => '2019-11-20T05:50:28.267Z';
 
     const writeRecord = function(path, record) {
       assert.strictEqual(path, './juiceTransactionRecords.json');
@@ -129,8 +127,8 @@ describe('saveRecord', function() {
 
 /*------------------------------queryRecord------------------------------*/
 
-describe('queryRecords', function() {
-  it('Should give all beverage transactions of a employee', function() {
+describe('queryRecords', () => {
+  it('Should give all beverage transactions of a employee', () => {
     let actualValue = queryRecords(
       '[{ "empId":"1111","beverage": "Orange", "qty": "1", "date": "2019-11-20T05:50:28.267Z" }]',
       { '--empId': '1111' }
@@ -147,7 +145,7 @@ describe('queryRecords', function() {
     assert.deepStrictEqual(actualValue, expectedValue);
   });
 
-  it.skip("Should give 'Employee ID does not exist' when record of an employee is not present", function() {
+  it.skip("Should give 'Employee ID does not exist' when record of an employee is not present", () => {
     let actualValue = queryRecords('{}', { '-empId': '1111' });
     let expectedValue = 'Employee ID does not exist';
 
@@ -163,11 +161,11 @@ describe('queryRecords', function() {
 
 /*------------------------------getTransactionRecord------------------------------*/
 
-describe('getTransactionRecord', function() {
-  it('Should give an record object', function() {
+describe('getTransactionRecord', () => {
+  it('Should give an record object', () => {
     const date = '2019-11-28T16:38:33.540Z';
 
-    const getDate = function() {
+    const getDate = () => {
       return date;
     };
 
@@ -191,8 +189,8 @@ describe('getTransactionRecord', function() {
 
 /*------------------------------filterQueryRecord------------------------------*/
 
-describe('filterQueryRecord', function() {
-  it('Should give true when the empId is same', function() {
+describe('filterQueryRecord', () => {
+  it('Should give true when the empId is same', () => {
     let record = {
       empId: '1234',
       date: '2019-11-20T05:50:28.267Z',
@@ -201,7 +199,7 @@ describe('filterQueryRecord', function() {
     };
     assert.ok(filterQueryRecord({ '--empId': '1234' }, record));
   });
-  it('Should give false when the empId is different', function() {
+  it('Should give false when the empId is different', () => {
     let record = {
       empId: '123',
       date: '2019-11-20T05:50:28.267Z',
@@ -210,7 +208,7 @@ describe('filterQueryRecord', function() {
     };
     assert.notOk(filterQueryRecord({ '--empId': '1234' }, record));
   });
-  it('Should give true when the date is same', function() {
+  it('Should give true when the date is same', () => {
     let record = {
       empId: '1234',
       date: '2019-11-20T05:50:28.267Z',
@@ -219,7 +217,7 @@ describe('filterQueryRecord', function() {
     };
     assert.ok(filterQueryRecord({ '--date': '2019-11-20' }, record));
   });
-  it('Should give false when the date is different', function() {
+  it('Should give false when the date is different', () => {
     let record = {
       empId: '1234',
       date: '2019-11-20T05:50:28.267Z',
@@ -228,7 +226,7 @@ describe('filterQueryRecord', function() {
     };
     assert.notOk(filterQueryRecord({ '--date': '2019-11-21' }, record));
   });
-  it('Should give true when the date and empId are same', function() {
+  it('Should give true when the date and empId are same', () => {
     const parameters = {
       '--date': '2019-11-20',
       '--empId': '1234'
@@ -241,7 +239,7 @@ describe('filterQueryRecord', function() {
     };
     assert.ok(filterQueryRecord(parameters, record));
   });
-  it('Should give false when the date and empId are different', function() {
+  it('Should give false when the date and empId are different', () => {
     const parameters = {
       '--date': '2019-11-20',
       '--empId': '1234'
