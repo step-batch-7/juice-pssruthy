@@ -1,0 +1,4 @@
+(export NOW="2019-11-20T05:50:28.267Z";export JUICE_TRANSACTIONS_STORE_PATH="./appTests/v1_data_file_for_save_txn.json";node beverage.js --save --beverage Orange --empId 11111 --qty 1)
+Transaction Recorded:
+Employee ID,Beverage,Quantity,Date
+11111,Orange,1,2019-11-20T05:50:28.267Z

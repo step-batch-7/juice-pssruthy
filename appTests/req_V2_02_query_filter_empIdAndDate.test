@@ -1,0 +1,4 @@
+(export JUICE_TRANSACTIONS_STORE_PATH="./appTests/v2_data_file_for_query_filter_dateAndEmpId.json";node beverage.js --query --date 2019-11-20 --empId 11111)
+Employee ID,Beverage,Quantity,Date
+11111,Orange,1,2019-11-20T05:50:28.267Z
+Total: 1 Juice

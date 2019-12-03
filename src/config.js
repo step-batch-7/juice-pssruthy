@@ -1,5 +1,5 @@
 const getDataStorePath = env =>
-  env.JUICE_TRANSACTIONS_STORE_PATH || './data/beverageRecords.json';
+  env.JUICE_TRANSACTIONS_STORE_PATH || './data/juiceTransactionRecords.json';
 
 const timeStamp = env => {
   const stubbedDate = new Date(env.NOW);

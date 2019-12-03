@@ -5,7 +5,7 @@ const {
   isValidDate
 } = require('./utilitiesLib');
 
-//////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
 
 const areArgsValid = function(cmdLineArgs) {
   const feature = cmdLineArgs[0];
@@ -21,7 +21,7 @@ const areArgsValid = function(cmdLineArgs) {
   return false;
 };
 
-//////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
 
 const areSaveFeatureDetailsValid = function(details) {
   const lengthFlag = isValidLength(details.length, 6);
@@ -33,7 +33,7 @@ const areSaveFeatureDetailsValid = function(details) {
   return lengthFlag && beverageFlag && qtyFlag && empIdFlag;
 };
 
-//////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
 
 const areQueryDetailsValid = function(details) {
   const lengthFlag = isValidLength(details.length, 6);
@@ -46,14 +46,14 @@ const areQueryDetailsValid = function(details) {
   return lengthFlag && optionsFlag && empIdFlag && beverageFlag && dateFlag;
 };
 
-//////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
 
 const isFeatureOptionValid = function(option) {
   const validOptions = ['--save', '--query'];
   return validOptions.includes(option);
 };
 
-//////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
 
 const isBeverageValid = function(beverage) {
   const beverages = ['Orange', 'Watermelon'];
@@ -61,7 +61,7 @@ const isBeverageValid = function(beverage) {
   return beverages.includes(beverage);
 };
 
-//////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
 
 const isValidEmpIdForQuery = function(parameters) {
   const empIdPresentFlag =
@@ -70,7 +70,7 @@ const isValidEmpIdForQuery = function(parameters) {
   const empIdAbsentFlag = !parameters.hasOwnProperty('--empId');
   return empIdAbsentFlag || empIdPresentFlag;
 };
-//////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
 
 const isValidDateForQuery = function(parameters) {
   const option = '--date';
@@ -80,7 +80,7 @@ const isValidDateForQuery = function(parameters) {
   return dateAbsentFlag || datePresentFlag;
 };
 
-//////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
 
 const isValidBeverageForQuery = function(parameters) {
   const option = '--beverage';
@@ -90,7 +90,7 @@ const isValidBeverageForQuery = function(parameters) {
   return beverageAbsentFlag || beveragePresentFlag;
 };
 
-//////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
 
 const areQueryOptionsValid = function(options) {
   let optionFlag = true;
@@ -109,5 +109,6 @@ module.exports = {
   isBeverageValid,
   isValidEmpIdForQuery,
   areQueryOptionsValid,
-  isValidBeverageForQuery
+  isValidBeverageForQuery,
+  isValidDateForQuery
 };

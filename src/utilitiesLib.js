@@ -1,23 +1,25 @@
 const { existsSync, readFileSync, writeFileSync } = require('fs');
 
-const readTransactionRecords = function(path) {
-  if (existsSync(path)) {
-    return readFileSync(path, 'utf8');
+const readTransactionRecords = function(readFile, path, isExist, encoding) {
+  if (isExist(path)) {
+    return readFile(path, encoding);
   }
   return '[]';
 };
 
-const writeTransactionRecords = function(paths, records) {
-  writeFileSync(paths, records, 'utf8');
+////////////////////////////////////////////////////////////
+
+const writeTransactionRecords = function(writeRecord, paths, records) {
+  writeRecord(paths, records, 'utf8');
 };
 
-const getDate = () => {
-  return process.env.NOW || new Date().toJSON();
-};
+////////////////////////////////////////////////////////////
 
 const isPositiveNumber = function(number) {
   return +number > 0 && Number.isInteger(+number);
 };
+
+////////////////////////////////////////////////////////////
 
 const getSplitedParameters = function(splittedParameters, parameters) {
   if (parameters.length == 0) {
@@ -27,11 +29,20 @@ const getSplitedParameters = function(splittedParameters, parameters) {
   return getSplitedParameters(splittedParameters, parameters.slice(2));
 };
 
+////////////////////////////////////////////////////////////
+
 const isValidDate = function isValidDate(date) {
-  let dateArray = date.split('-');
-  let newDate = new Date(dateArray[0], dateArray[1] - 1, dateArray[2]);
-  return newDate.getMonth() + 1 == dateArray[1] && +dateArray[0] > 0;
+  const dateArray = date.split('-');
+  const newDate = new Date(dateArray[0], dateArray[1] - 1, dateArray[2]);
+  const dateFlag = newDate.getDate() == dateArray[2];
+  const monthFlag = newDate.getMonth() + 1 == dateArray[1];
+  const yearFlag = newDate.getFullYear() == dateArray[0];
+
+  // return newDate.getMonth() + 1 == dateArray[1] && +dateArray[0] > 0;
+  return dateFlag && monthFlag && yearFlag;
 };
+
+////////////////////////////////////////////////////////////
 
 const isValidLength = function(length, limit) {
   return length <= limit && length % 2 == 0;
@@ -42,7 +53,6 @@ module.exports = {
   readTransactionRecords,
   isPositiveNumber,
   getSplitedParameters,
-  getDate,
   isValidDate,
   isValidLength
 };

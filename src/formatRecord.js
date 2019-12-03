@@ -14,7 +14,7 @@ const formateQueryRecord = function(records) {
     totalBeverages = totalBeverages + +record['qty'];
   }
   let juiceNoun = 'Juice';
-  totalBeverages > 1 ? (juiceNoun = 'Juices') : (juiceNoun = 'Juice');
+  totalBeverages === 1 ? (juiceNoun = 'Juice') : (juiceNoun = 'Juices');
   formatedRecords = `${formatedRecords}\nTotal: ${totalBeverages} ${juiceNoun}`;
   return formatedRecords;
 };

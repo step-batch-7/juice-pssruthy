@@ -1,21 +1,22 @@
-const operateJuiceRecords = require('./src/beverageLib').operateJuiceRecords;
-const {
-  readTransactionRecords,
-  writeTransactionRecords,
-  getDate
-} = require('./src/utilitiesLib');
-const { getDataStorePath } = require('./src/config');
+const { readFileSync, writeFileSync, existsSync } = require('fs');
+const { operateJuiceRecords } = require('./src/beverageLib');
+const { getDataStorePath, timeStamp } = require('./src/config');
 
 const main = function(cmdLinArgs) {
   const path = getDataStorePath(process.env);
+  const readFile = readFileSync;
+  const writeFille = writeFileSync;
+  const isFileExist = existsSync;
+  const getDate = timeStamp.bind(null, process.env);
+  const encoding = 'utf8';
+
+  const fileOperations = {
+    write: writeFille,
+    read: readFile,
+    fileExist: isFileExist
+  };
   console.log(
-    operateJuiceRecords(
-      cmdLinArgs,
-      readTransactionRecords,
-      writeTransactionRecords,
-      getDate,
-      path
-    )
+    operateJuiceRecords(cmdLinArgs, fileOperations, path, getDate, encoding)
   );
 };
 
