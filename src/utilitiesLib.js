@@ -38,7 +38,6 @@ const isValidDate = function isValidDate(date) {
   const monthFlag = newDate.getMonth() + 1 == dateArray[1];
   const yearFlag = newDate.getFullYear() == dateArray[0];
 
-  // return newDate.getMonth() + 1 == dateArray[1] && +dateArray[0] > 0;
   return dateFlag && monthFlag && yearFlag;
 };
 

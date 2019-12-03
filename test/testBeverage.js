@@ -5,7 +5,8 @@ const {
   queryRecords,
   getTransactionRecord,
   operateJuiceRecords,
-  filterQueryRecord
+  filterQueryRecord,
+  isDatesEqual
 } = require('../src/beverageLib');
 
 describe('beverageLib.js', () => {
@@ -422,6 +423,19 @@ describe('beverageLib.js', () => {
         beverage: 'Orange'
       };
       assert.notOk(filterQueryRecord(parameters, record));
+    });
+  });
+
+  describe('isDatesEqual', function() {
+    it('Should give true when two dates are equal', function() {
+      assert.ok(isDatesEqual('2019-10-10', '2019-10-10T16:25:27.783Z'));
+      assert.ok(isDatesEqual('2019-01-10', '2019-01-10T16:25:27.783Z'));
+      assert.ok(isDatesEqual('2019-1-10', '2019-01-10T16:25:27.783Z'));
+    });
+    it('Should give false when two dates are not equal', function() {
+      assert.notOk(isDatesEqual('2019-11-11', '2019-01-27T16:25:27.783Z'));
+      assert.notOk(isDatesEqual('2019-12-10', '2019-11-17T16:25:27.783Z'));
+      assert.notOk(isDatesEqual('2019-09-10', '2019-10-27T16:25:27.783Z'));
     });
   });
 });

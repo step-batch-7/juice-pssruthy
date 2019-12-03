@@ -110,11 +110,20 @@ const filterQueryRecord = function(parameters, record) {
   for (const option in parameters) {
     optionValue = record[options[option]];
     if (option === '--date') {
-      optionValue = optionValue.slice(0, 10);
-    }
-    flag = flag && parameters[option] === optionValue;
+      flag = flag && isDatesEqual(parameters[option], optionValue);
+    } else flag = flag && parameters[option] === optionValue;
   }
   return flag;
+};
+
+const isDatesEqual = function(date1, date2) {
+  const newDate1 = new Date(date1);
+  const newDate2 = new Date(date2);
+  const dateFlag = newDate1.getDate() == newDate2.getDate();
+  const monthFlag = newDate1.getMonth() == newDate2.getMonth();
+  const yearFlag = newDate1.getFullYear() == newDate2.getFullYear();
+
+  return dateFlag && monthFlag && yearFlag;
 };
 
 module.exports = {
@@ -122,5 +131,6 @@ module.exports = {
   queryRecords,
   getTransactionRecord,
   operateJuiceRecords,
-  filterQueryRecord
+  filterQueryRecord,
+  isDatesEqual
 };

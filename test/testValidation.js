@@ -195,6 +195,9 @@ describe('validationLib.js', () => {
       };
       assert.ok(isValidBeverageForQuery(parameters));
     });
+    it('Should give true when the beverage option  is not present', () => {
+      assert.ok(isValidBeverageForQuery({ '--date': '2019-10-10' }));
+    });
   });
 
   /*------------------------------isValidDateForQuery------------------------------*/
