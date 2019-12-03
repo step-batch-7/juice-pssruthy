@@ -2,6 +2,8 @@ const assert = require('assert');
 const { getDataStorePath, timeStamp } = require('./../src/config');
 
 describe('config.js', () => {
+  /*------------------------------getDataStorePath------------------------------*/
+
   describe('getDataStorePath', function() {
     it('should pick the path from the env variable', () => {
       const env = { JUICE_TRANSACTIONS_STORE_PATH: 'data.json' };
@@ -15,6 +17,8 @@ describe('config.js', () => {
       );
     });
   });
+
+  /*------------------------------timeStamp------------------------------*/
 
   describe('timeStamp', function() {
     it('should give current time by default', function() {

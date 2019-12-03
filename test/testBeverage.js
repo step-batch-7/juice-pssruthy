@@ -181,7 +181,6 @@ describe('beverageLib.js', () => {
         assert.strictEqual(encoding, 'utf8');
         assert.strictEqual(path, './juiceTransactionRecords.json');
       };
-      const fileOperations = { write: writeFile, date: getDate };
 
       let expectedValue = {
         empId: '1111',
@@ -221,7 +220,6 @@ describe('beverageLib.js', () => {
         '--beverage': 'Orange',
         '--qty': '1'
       };
-      const fileOperations = { write: writeFile };
 
       let actualValue = saveRecord(
         currentRecords,
@@ -246,16 +244,66 @@ describe('beverageLib.js', () => {
   /*------------------------------queryRecord------------------------------*/
 
   describe('queryRecords', () => {
+    it('Should return empty array when options are not match', () => {
+      const currentRecords =
+        '[{ "empId":"1111","beverage": "Orange", "qty": "1", "date": "2019-11-20T05:50:28.267Z" }]';
+      const actualValue = queryRecords(currentRecords, { '--empId': '1234' });
+
+      assert.deepStrictEqual(actualValue, []);
+    });
+
     it('Should give all beverage transactions of a employee', () => {
-      let actualValue = queryRecords(
-        '[{ "empId":"1111","beverage": "Orange", "qty": "1", "date": "2019-11-20T05:50:28.267Z" }]',
-        { '--empId': '1111' }
-      );
+      let currentRecords =
+        '[{ "empId":"1111","beverage": "Orange", "qty": "1", "date": "2019-11-20T05:50:28.267Z" }]';
+      let actualValue = queryRecords(currentRecords, { '--empId': '1111' });
 
       let expectedValue = [
         {
           empId: '1111',
           beverage: 'Orange',
+          qty: '1',
+          date: '2019-11-20T05:50:28.267Z'
+        }
+      ];
+      assert.deepStrictEqual(actualValue, expectedValue);
+
+      currentRecords =
+        '[{ "empId":"1111","beverage": "Orange", "qty": "1", "date": "2019-11-20T05:50:28.267Z" }';
+      currentRecords = `${currentRecords},{ "empId": "1111", "beverage": "Watermelon", "qty": "1", "date": "2019-10-20T05:50:28.267Z" }]`;
+      actualValue = queryRecords(currentRecords, { '--empId': '1111' });
+
+      expectedValue = [
+        {
+          empId: '1111',
+          beverage: 'Orange',
+          qty: '1',
+          date: '2019-11-20T05:50:28.267Z'
+        },
+        {
+          empId: '1111',
+          beverage: 'Watermelon',
+          qty: '1',
+          date: '2019-10-20T05:50:28.267Z'
+        }
+      ];
+      assert.deepStrictEqual(actualValue, expectedValue);
+    });
+    it('Should give all transactions of a date', () => {
+      currentRecords =
+        '[{ "empId":"1111","beverage": "Orange", "qty": "1", "date": "2019-11-20T05:50:28.267Z" }';
+      currentRecords = `${currentRecords},{ "empId": "1234", "beverage": "Watermelon", "qty": "1", "date": "2019-11-20T05:50:28.267Z" }]`;
+      actualValue = queryRecords(currentRecords, { '--date': '2019-11-20' });
+
+      expectedValue = [
+        {
+          empId: '1111',
+          beverage: 'Orange',
+          qty: '1',
+          date: '2019-11-20T05:50:28.267Z'
+        },
+        {
+          empId: '1234',
+          beverage: 'Watermelon',
           qty: '1',
           date: '2019-11-20T05:50:28.267Z'
         }
